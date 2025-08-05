@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do Web App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      margin: 20px;
+    }
+    .todo-container {
+      max-width: 500px;
+      margin: auto;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 1em;
+    }
+    input[type="text"] {
+      width: 60%;
+    }
+    input[type="datetime-local"] {
+      width: 35%;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background-color: #333;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .actions button {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <div class="todo-container">
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <input type="datetime-local" id="taskDate">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskDate = document.getElementById("taskDate");
+    const taskList = document.getElementById("taskList");
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      const dateTime = taskDate.value;
+
+      if (!taskText) return;
+
+      const li = document.createElement("li");
+      const taskSpan = document.createElement("span");
+      const timeSpan = document.createElement("small");
+      taskSpan.textContent = taskText;
+      timeSpan.textContent = `\nDue: ${new Date(dateTime).toLocaleString()}`;
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const completeBtn = document.createElement("button");
+      completeBtn.textContent = "✔";
+      completeBtn.onclick = () => taskSpan.classList.toggle("completed");
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✎";
+      editBtn.onclick = () => {
+        const newTask = prompt("Edit your task:", taskSpan.textContent);
+        if (newTask) taskSpan.textContent = newTask;
+      };
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑";
+      deleteBtn.onclick = () => li.remove();
+
+      actions.append(completeBtn, editBtn, deleteBtn);
+      li.append(taskSpan, timeSpan, actions);
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+      taskDate.value = "";
+    }
+  </script>
+</body>
+</html>
